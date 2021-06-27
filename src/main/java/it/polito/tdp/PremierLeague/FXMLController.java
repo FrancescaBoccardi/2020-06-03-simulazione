@@ -7,7 +7,9 @@ package it.polito.tdp.PremierLeague;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.PremierLeague.model.Adiacenza;
 import it.polito.tdp.PremierLeague.model.Model;
+import it.polito.tdp.PremierLeague.model.Player;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -44,17 +46,36 @@ public class FXMLController {
 
     @FXML
     void doCreaGrafo(ActionEvent event) {
-
+    	
+    	float x = Float.parseFloat(this.txtGoals.getText());
+    	
+    	this.model.creaGrafo(x);
+    	int vertici = this.model.getGrafo().vertexSet().size();
+    	int archi = this.model.getGrafo().edgeSet().size();
+    	
+    	txtResult.setText("Grafo creato:\n#Vertici: "+vertici+"\n#Archi: "+archi);
     }
 
     @FXML
     void doDreamTeam(ActionEvent event) {
-
+    	
+    	txtResult.clear();
+    	int k = Integer.parseInt(this.txtK.getText());
+    	for(Player p : model.ricorsione(k)) {
+    		this.txtResult.appendText(p.toString()+"\n");
+    	}
+    	
+    	this.txtResult.appendText("Grado di titolarità: "+model.getGradoMax());
     }
 
     @FXML
     void doTopPlayer(ActionEvent event) {
-
+    	
+    	this.txtResult.setText("Top player: "+model.topPlayer()+"\n\nAvversari battuti:\n");
+    	
+    	for(Adiacenza a : this.model.adiacenzeTop()) {
+    		this.txtResult.appendText(a.getP2().toString()+"\n");
+    	}
     }
 
     @FXML // This method is called by the FXMLLoader when initialization is complete
